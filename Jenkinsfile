@@ -11,21 +11,20 @@ pipeline {
         }
         stage('Docker Check') {
             steps {
-                // Permission fix ke baad ye chal jayega
                 sh 'docker ps'
             }
         }
         stage('Docker Build & Run') {
             steps {
-                // 1. Purana container delete karo agar pehle se chal raha hai
+                // 1. Purana container delete karein (agar hai toh), nahi hai toh error ignore karein
                 sh 'docker rm -f my-web-app || true'
                 
-                // 2. Dockerfile ka use karke Image banao
+                // 2. Nayi image banayein (Ab ye 'Dockerfile' ko dhund lega)
                 sh 'docker build -t my-custom-web-image .'
                 
-                // 3. Image ko container ke roop mein chalao (Port 8081 par)
+                // 3. Container run karein port 8081 par
                 sh 'docker run -d -p 8081:80 --name my-web-app my-custom-web-image'
             }
         }
-    } 
+    }
 }

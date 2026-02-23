@@ -1,23 +1,20 @@
 pipeline {
     agent any
     stages {
-        stage('Build') {
+        stage('Build & Test') {
             steps {
                 echo "Building from GitHub..."
                 sh 'terraform --version'
-                
-                // Pehle file ko executable banayein, phir run karein
                 sh 'chmod +x test.sh'
                 sh './test.sh'
-                stage('Docker Deploy') {
-    steps {
-        // Purana crash hone wala container remove karo agar hai toh
-        sh 'docker rm -f infinite-crash || true'
-        // Naya container chalao
-        sh 'docker run -d --name infinite-crash --restart always alpine sh -c "sleep 5; exit 1"'
-        // Check karo ki status kya hai
-        sh 'docker ps'
             }
         }
-    }
-}
+        stage('Docker Check') {
+            steps {
+                // Ye wahi line hai jo error degi (Permission Denied)
+                // Hum ise जान-बूझकर add kar rahe hain troubleshoot seekhne ke liye
+                sh 'docker ps'
+            }
+        }
+    } // stages ka bracket
+} // pipeline ka bracket

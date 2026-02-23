@@ -11,10 +11,21 @@ pipeline {
         }
         stage('Docker Check') {
             steps {
-                // Ye wahi line hai jo error degi (Permission Denied)
-                // Hum ise जान-बूझकर add kar rahe hain troubleshoot seekhne ke liye
+                // Permission fix ke baad ye chal jayega
                 sh 'docker ps'
             }
         }
-    } // stages ka bracket
-} // pipeline ka bracket
+        stage('Docker Build & Run') {
+            steps {
+                // 1. Purana container delete karo agar pehle se chal raha hai
+                sh 'docker rm -f my-web-app || true'
+                
+                // 2. Dockerfile ka use karke Image banao
+                sh 'docker build -t my-custom-web-image .'
+                
+                // 3. Image ko container ke roop mein chalao (Port 8081 par)
+                sh 'docker run -d -p 8081:80 --name my-web-app my-custom-web-image'
+            }
+        }
+    } 
+}

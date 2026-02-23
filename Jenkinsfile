@@ -4,7 +4,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Building from GitHub..."
-                sh 'terraform --version'
+                sh 'terraform --versio
             }
         }
     }

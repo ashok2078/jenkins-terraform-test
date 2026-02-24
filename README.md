@@ -31,6 +31,18 @@ Pipeline Resilience:  Implemented `|| true` logic to prevent pipeline failures d
     Deployment Access
 Once the Jenkins build is **SUCCESS** the application is accessible at:
 `http://192.168.20.128:8081`
+## Advanced Automation: Zero-Touch CI/CD
+In the latest update, I have transitioned from manual builds to a "Fully Automated Deployment model":
+
+GitHub Webhooks Integration: Configured webhooks to trigger the Jenkins pipeline automatically on every `git push`.
+Secure Tunneling with Ngrok: Implemented an Ngrok tunnel to expose the local Jenkins VM to the internet, allowing GitHub to send real-time event payloads.
+Event-Driven Architecture: The system now identifies code changes instantly, reducing the deployment time from minutes to seconds.
+
+       How it works now
+1. Developer pushes code to GitHub.
+2. GitHub sends a POST request via "Ngrok Tunnel".
+3. "Jenkins" receives the signal and starts the build immediately.
+4. "Docker" redeploys the updated container.
 
 ---
 📫 **Connect with me:** [Insert your LinkedIn Profile Link here]

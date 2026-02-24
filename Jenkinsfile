@@ -11,13 +11,14 @@ pipeline {
         }
         stage('Docker Deploy') {
             steps {
-                // Purana container clean karna
+                echo "Deploying Docker Container on Port 8081..."
+                // 1. Purana container clean karna (agar exist karta hai)
                 sh 'docker rm -f my-web-app || true'
                 
-                // Nayi image banana (index.html copy ho jayega)
+                // 2. Nayi image build karna
                 sh 'docker build -t my-custom-web-image .'
                 
-                // --restart always se VM chalu hote hi website live ho jayegi
+                // 3. Container run karna Port 8081 par
                 sh 'docker run -d -p 8081:80 --name my-web-app --restart always my-custom-web-image'
             }
         }

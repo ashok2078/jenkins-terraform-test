@@ -1,0 +1,24 @@
+name: Build and Deploy Docker Web Server
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy Docker Container
+        run: |
+          # Purane container ko stop aur remove karein (agar chal raha ho)
+          docker stop my-website || true
+          docker rm my-website || true
+
+          # Naya Nginx Web Container run karein
+          docker run -d --name my-website -p 8080:80 -v ${{ github.workspace }}:/usr/share/nginx/html:ro nginx:alpine
+          
+          echo "Deployment successful on port 8080!"
